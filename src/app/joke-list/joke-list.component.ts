@@ -29,6 +29,10 @@ export class JokeListComponent implements OnInit {
     joke.toggle();
   }
 
+  addJoke(joke) {
+    this.jokes.unshift(joke);
+  }
+
   ngOnInit() {
   }
 
