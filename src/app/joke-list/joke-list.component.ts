@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Joke } from '../joke';
+import { HeroService } from '../hero.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-joke-list',
@@ -9,20 +11,14 @@ import { Joke } from '../joke';
 export class JokeListComponent implements OnInit {
   jokes: Joke[];
 
-  constructor() {
-    this.jokes = [
-      new Joke(
-        'What did the cheese say when it looked in the mirror?',
-        'Hello-Me (Halloumi)'),
-      new Joke(
-        'What kind of cheese do you use to disguise a small horse?',
-        'Mask-a-pony (Mascarpone)'
-      ),
-      new Joke(
-        'A kid threw a lump of cheddar at me',
-        'I thought ‘That’s not very mature’'
-      )
-    ];
+  constructor(private heroService: HeroService, private http: HttpClient) {
+
+  }
+
+  getHeroes(): void {
+    // this.jokes = this.heroService.getHeroes();
+    this.heroService.getHeroes()
+      .subscribe(jokes => this.jokes = jokes);
   }
 
   toggle(joke: Joke) {
@@ -34,6 +30,20 @@ export class JokeListComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.getHeroes();
+    this.http.get<Icndb>('http://api.icndb.com/jokes/random').subscribe(data => {
+      console.log(data.value.joke);
+      this.addJoke(new Joke(data.value.joke, ''));
+    });
+
   }
 
 }
+
+interface Icndb {
+  type: string;
+  value: {
+    id: number,
+    joke: string
+    };
+  }
