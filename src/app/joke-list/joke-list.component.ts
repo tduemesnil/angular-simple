@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Joke } from '../joke';
-import { HeroService } from '../hero.service';
 import { HttpClient } from '@angular/common/http';
+import { Joke } from '../joke';
+import { JokeService } from '../joke.service';
+import { JokeApi } from '../interfaces';
 
 @Component({
   selector: 'app-joke-list',
@@ -11,13 +12,13 @@ import { HttpClient } from '@angular/common/http';
 export class JokeListComponent implements OnInit {
   jokes: Joke[];
 
-  constructor(private heroService: HeroService, private http: HttpClient) {
+  constructor(private jokeService: JokeService, private http: HttpClient) {
 
   }
 
-  getHeroes(): void {
+  getJokes(): void {
     // this.jokes = this.heroService.getHeroes();
-    this.heroService.getHeroes()
+    this.jokeService.getJokes()
       .subscribe(jokes => this.jokes = jokes);
   }
 
@@ -30,20 +31,15 @@ export class JokeListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getHeroes();
-    this.http.get<Icndb>('http://api.icndb.com/jokes/random').subscribe(data => {
-      console.log(data.value.joke);
-      this.addJoke(new Joke(data.value.joke, ''));
-    });
+    this.getJokes();
 
+    this.http.get<JokeApi[]>('https://08ad1pao69.execute-api.us-east-1.amazonaws.com/dev/random_ten').subscribe(data => {
+      console.log(data.length);
+      data.forEach(element => {
+        this.addJoke(new Joke(element.setup, element.punchline, element.type, element.id));
+      });
+    });
   }
 
 }
 
-interface Icndb {
-  type: string;
-  value: {
-    id: number,
-    joke: string
-    };
-  }
