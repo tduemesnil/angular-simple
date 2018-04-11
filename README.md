@@ -26,12 +26,13 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
 
+## Cli Commands used to preset the Files
 
-
-ng g c joke
-ng g class Joke
-ng g c joke-list
-ng g c joke-form
-ng generate service hero --module=app
-ng generate component messages
-ng generate service message --module=app
+- ng g c joke
+- ng g class Joke
+- ng g c joke-list
+- ng g c joke-form
+- ng generate service joke --module=app
+- ng generate component messages
+- ng generate service message --module=app
+- ng generate interface interfaces
